@@ -2,11 +2,9 @@
 
 Scrubby is a Reddit bot that will delete posts and comments  based on date and/or a maximum number of posts. 
 
-  if max_posts >= 30 or comment_age > 21:
-  
-    comment.edit(body=comment)
-    
-    comment.delete()  
+    if max_posts >= 30 or comment_age > 21:
+      comment.edit(body=comment)
+      comment.delete()  
 
 usage: python scrubby.py [a|c|p|s|sc|sp]
     
