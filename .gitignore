@@ -1,0 +1,10 @@
+__pycache__/
+.ipynb_checkpoints/
+include/
+bin/
+lib/
+*.ipynb 
+*.log
+*.cfg
+praw.ini 
+.DS_Store
