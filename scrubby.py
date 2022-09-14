@@ -130,7 +130,7 @@ def scrub_subreddit_posts(reddit, r):
 
 
 def scrub_comments(reddit):
-    x, y = 0, 0
+    max_posts, y = 0, 0
 
     # parse the comments, overwrite those older than specified days and delete
     for comment in reddit.user.me().comments.new(limit=None):
@@ -141,7 +141,7 @@ def scrub_comments(reddit):
         comment_age = a["age"]
 
         # iterate all of the comments, overwrite and delete any comment over specified days old
-        if x >= 30 or comment_age > 21:
+        if max_posts >= 30 or comment_age > 21:
             comment.edit(body=comment)
             comment.delete()
             y += 1
