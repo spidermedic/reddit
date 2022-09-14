@@ -8,11 +8,11 @@ Scrubby is a Reddit bot that will delete posts and comments  based on date and/o
 
 usage: python scrubby.py [a|c|p|s|sc|sp]
     
-OPTIONS:
-c  = deletes comments
-p  = deletes posts
-a  = deletes all comments and posts
-s  = list subreddits with posts or comments
-sc = deletes all comments in a subreddit (opt: subreddit)
-sp = deletes all posts in a subreddit    (opt: subreddit)
+OPTIONS:  
+ c  = deletes comments  
+ p  = deletes posts  
+ a  = deletes all comments and posts  
+ s  = list subreddits with posts or comments  
+ sc = deletes all comments in a subreddit (opt: subreddit)  
+ sp = deletes all posts in a subreddit    (opt: subreddit)  
  
