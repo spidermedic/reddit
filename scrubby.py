@@ -144,6 +144,7 @@ def main():
     # get oauth information from praw.ini
     try:
         reddit = praw.Reddit("oauth", config_interpolation="basic")
+        reddit.validate_on_submit = True
         logging.info(" OAuth Success")
     except:
         logging.error(" OAuth Failed")
