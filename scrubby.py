@@ -7,58 +7,6 @@ from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 
-def main():
-
-    print()
-
-    # just some variables
-    usage = """OPTIONS:
-    ls = list subreddits with posts or comments
-    a  = scrub all comments and posts
-    c  = scrub all comments
-    p  = scrub all posts
-    sc = all comments in a subreddit (opt: subreddit)
-    sp = all posts in a subreddit    (opt: subreddit)
-        """
-
-    # get oauth information from praw.ini
-    try:
-        reddit = praw.Reddit("oauth", config_interpolation="basic")
-        logging.info("OAuth Success")
-    except:
-        logging.error("OAuth Failed")
-
-    # get the command argument and run the appropriate modules
-    if len(sys.argv) > 1:
-        match sys.argv[1]:
-            case "a" | "all":
-                scrub_comments(reddit)
-                scrub_posts(reddit)
-            case "c" | "comments":
-                scrub_comments(reddit)
-            case "p" | "posts":
-                scrub_posts(reddit)
-            case "sc":
-                if len(sys.argv) > 2:
-                    r = sys.argv[2]
-                else:
-                    r = input("Which subreddit? r/")
-                scrub_subreddit_comments(reddit, r)
-            case "sp":
-                if len(sys.argv) > 2:
-                    r = sys.argv[2]
-                else:
-                    r = input("Which subreddit? r/")
-                scrub_subreddit_posts(reddit, r)
-            case "ls":
-                list_subs(reddit)
-            case _:
-                sys.exit(usage)
-    else:
-        sys.exit(usage)
-
-    sys.exit(0)
-
 
 def get_age(item):
     # get the date and age of the passed item
@@ -98,7 +46,7 @@ def scrub_subreddit_comments(reddit, r):
         x += 1
 
     # return the number of comments found and deleted
-    logging.info(f"  Comments: {y}/{x}")
+    logging.info(f" Comments: {y}/{x}")
 
 
 def scrub_subreddit_posts(reddit, r):
@@ -116,7 +64,7 @@ def scrub_subreddit_posts(reddit, r):
         x += 1
 
     # return the number of comments found and deleted
-    logging.info(f"  Posts: {y}/{x}")
+    logging.info(f" Posts: {y}/{x}")
 
 
 def scrub_comments(reddit):
@@ -147,7 +95,7 @@ def scrub_comments(reddit):
         x += 1
 
     # return the number of comments found and deleted
-    logging.info(f"  Comments: {y}/{x}, Edit errors: {e_error}, Delete errors: {d_error}")
+    logging.info(f" Comments: {y}/{x}, Edit errors: {e_error}, Delete errors: {d_error}")
 
 
 def scrub_posts(reddit):
@@ -176,7 +124,60 @@ def scrub_posts(reddit):
         x += 1
 
     # return the number of posts found and deleted
-    logging.info(f"  Posts: {y}/{x}, Errors: {d_error}")
+    logging.info(f" Posts: {y}/{x}, Errors: {d_error}")
+
+
+def main():
+
+    print()
+
+    # just some variables
+    usage = """OPTIONS:
+    ls = list subreddits with posts or comments
+    a  = scrub all comments and posts
+    c  = scrub all comments
+    p  = scrub all posts
+    sc = all comments in a subreddit (opt: subreddit)
+    sp = all posts in a subreddit    (opt: subreddit)
+        """
+
+    # get oauth information from praw.ini
+    try:
+        reddit = praw.Reddit("oauth", config_interpolation="basic")
+        logging.info(" OAuth Success")
+    except:
+        logging.error(" OAuth Failed")
+
+    # get the command argument and run the appropriate modules
+    if len(sys.argv) > 1:
+        match sys.argv[1]:
+            case "a" | "all":
+                scrub_comments(reddit)
+                scrub_posts(reddit)
+            case "c" | "comments":
+                scrub_comments(reddit)
+            case "p" | "posts":
+                scrub_posts(reddit)
+            case "sc":
+                if len(sys.argv) > 2:
+                    r = sys.argv[2]
+                else:
+                    r = input("Which subreddit? r/")
+                scrub_subreddit_comments(reddit, r)
+            case "sp":
+                if len(sys.argv) > 2:
+                    r = sys.argv[2]
+                else:
+                    r = input("Which subreddit? r/")
+                scrub_subreddit_posts(reddit, r)
+            case "ls":
+                list_subs(reddit)
+            case _:
+                sys.exit(usage)
+    else:
+        sys.exit(usage)
+
+    sys.exit(0)
 
 
 if __name__ == "__main__":
