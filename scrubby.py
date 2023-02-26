@@ -2,8 +2,10 @@
 
 import sys
 import praw
+import logging
 from datetime import datetime
 
+logging.basicConfig(level=logging.INFO)
 
 def main():
 
@@ -11,45 +13,43 @@ def main():
 
     # just some variables
     usage = """OPTIONS:
-    c  = comments
-    p  = posts
-    a  = all comments and posts
-    ls  = list subreddits with posts or comments
+    ls = list subreddits with posts or comments
+    a  = scrub all comments and posts
+    c  = scrub all comments
+    p  = scrub all posts
     sc = all comments in a subreddit (opt: subreddit)
     sp = all posts in a subreddit    (opt: subreddit)
         """
-    comment_results = ""
-    post_results = ""
 
     # get oauth information from praw.ini
     try:
         reddit = praw.Reddit("oauth", config_interpolation="basic")
-        print("Oauth Success")
+        logging.info("OAuth Success")
     except:
-        logger("Oauth Failed")
+        logging.error("OAuth Failed")
 
     # get the command argument and run the appropriate modules
     if len(sys.argv) > 1:
         match sys.argv[1]:
-            case "c" | "comments":
-                comment_results = scrub_comments(reddit)
-            case "p" | "posts":
-                post_results = scrub_posts(reddit)
             case "a" | "all":
-                comment_results = scrub_comments(reddit)
-                post_results = scrub_posts(reddit)
+                scrub_comments(reddit)
+                scrub_posts(reddit)
+            case "c" | "comments":
+                scrub_comments(reddit)
+            case "p" | "posts":
+                scrub_posts(reddit)
             case "sc":
                 if len(sys.argv) > 2:
                     r = sys.argv[2]
                 else:
                     r = input("Which subreddit? r/")
-                comment_results = scrub_subreddit_comments(reddit, r)
+                scrub_subreddit_comments(reddit, r)
             case "sp":
                 if len(sys.argv) > 2:
                     r = sys.argv[2]
                 else:
                     r = input("Which subreddit? r/")
-                comment_results = scrub_subreddit_posts(reddit, r)
+                scrub_subreddit_posts(reddit, r)
             case "ls":
                 list_subs(reddit)
             case _:
@@ -57,25 +57,13 @@ def main():
     else:
         sys.exit(usage)
 
-    # print stats for this run to the screen and add to the log file
-    logger(f"{comment_results}\n{post_results}")
-
     sys.exit(0)
-
-
-def logger(log_data):
-    try:
-        with open("scrubby.log", "a+") as f:
-            print(log_data)
-            f.write(f"{datetime.now().strftime('%m-%d-%Y, %H:%m')}:\n{log_data}\n\n")
-    except:
-        print("Unable to write to log file")
 
 
 def get_age(item):
     # get the date and age of the passed item
-    d = datetime.fromtimestamp(item.created)
-    item_date = d.strftime("%m/%d/%Y")
+    #d = datetime.fromtimestamp(item.created)
+    item_date = datetime.fromtimestamp(item.created).strftime("%m/%d/%Y")
     item_age = (datetime.now() - datetime.fromtimestamp(item.created)).days
     return {"date": item_date, "age": item_age}
 
@@ -89,8 +77,8 @@ def list_subs(reddit):
         active_subs.add(post.subreddit.display_name)
 
     active_subs = sorted(active_subs)
-    for s in active_subs:
-        print(s)
+    for subs in active_subs:
+        print(subs)
 
     print()
     sys.exit(0)
@@ -110,7 +98,7 @@ def scrub_subreddit_comments(reddit, r):
         x += 1
 
     # return the number of comments found and deleted
-    return f"  Comments: {y}/{x}"
+    logging.info(f"  Comments: {y}/{x}")
 
 
 def scrub_subreddit_posts(reddit, r):
@@ -128,7 +116,7 @@ def scrub_subreddit_posts(reddit, r):
         x += 1
 
     # return the number of comments found and deleted
-    return f"  Posts: {y}/{x}"
+    logging.info(f"  Posts: {y}/{x}")
 
 
 def scrub_comments(reddit):
@@ -159,7 +147,7 @@ def scrub_comments(reddit):
         x += 1
 
     # return the number of comments found and deleted
-    return f"  Comments: {x}, Deleted: {y}, Edit errors: {e_error}, Delete errors: {d_error}"
+    logging.info(f"  Comments: {y}/{x}, Edit errors: {e_error}, Delete errors: {d_error}")
 
 
 def scrub_posts(reddit):
@@ -188,7 +176,7 @@ def scrub_posts(reddit):
         x += 1
 
     # return the number of posts found and deleted
-    return f"  Posts: {x}, Deleted {y}, Errors: {d_error}"
+    logging.info(f"  Posts: {y}/{x}, Errors: {d_error}")
 
 
 if __name__ == "__main__":
