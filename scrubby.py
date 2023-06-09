@@ -68,6 +68,8 @@ def scrub_subreddit_posts(reddit, r):
 
 
 def scrub_comments(reddit):
+    max_comments_allowed = 30  # limits the number comments to this number
+    max_comment_age = 10 # deletes comments older than the specified number of days
     x, y = 0, 0
     e_error, d_error = 0, 0
 
@@ -81,7 +83,7 @@ def scrub_comments(reddit):
         comment_age = a["age"]
 
         # iterate all of the comments, overwrite and delete any comment over specified days old
-        if x >= 25 or comment_age > 14:
+        if x >= max_comments_allowed or comment_age > max_comment_age:
             try:
                 comment.edit(body=comment)
             except:
@@ -99,6 +101,8 @@ def scrub_comments(reddit):
 
 
 def scrub_posts(reddit):
+    max_posts_allowed = 10 # limit the number of active posts
+    max_post_age = 14 # delete posts older than the specified number of days
     x, y = 0, 0
     d_error = 0
 
@@ -112,7 +116,7 @@ def scrub_posts(reddit):
         post_age = a["age"]
 
         # iterate all of the comments, overwrite and delete any comment over specified days old
-        if x >= 20 or post_age > 21:
+        if x >= max_posts_allowed or post_age > max_post_age:
             try:
                 post.delete()
             except:
@@ -134,9 +138,9 @@ def main():
     # just some variables
     usage = """OPTIONS:
     ls = list subreddits with posts or comments
-    a  = scrub all comments and posts
-    c  = scrub all comments
-    p  = scrub all posts
+    a  = scrub comments and posts
+    c  = scrub comments
+    p  = scrub posts
     sc = all comments in a subreddit (opt: subreddit)
     sp = all posts in a subreddit    (opt: subreddit)
         """
