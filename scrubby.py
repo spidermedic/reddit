@@ -69,7 +69,7 @@ def scrub_subreddit_posts(reddit, r):
 
 def scrub_comments(reddit):
     max_comments_allowed = 30  # limits the number comments to this number
-    max_comment_age = 10 # deletes comments older than the specified number of days
+    max_comment_age = 10       # deletes comments older than the specified number of days
     x, y = 0, 0
     e_error, d_error = 0, 0
 
@@ -101,8 +101,8 @@ def scrub_comments(reddit):
 
 
 def scrub_posts(reddit):
-    max_posts_allowed = 10 # limit the number of active posts
-    max_post_age = 14 # delete posts older than the specified number of days
+    max_posts_allowed = 10  # limit the number of active posts
+    max_post_age = 14       # delete posts older than the specified number of days
     x, y = 0, 0
     d_error = 0
 
