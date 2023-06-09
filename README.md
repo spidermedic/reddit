@@ -21,3 +21,4 @@ OPTIONS:
  sc : deletes all comments in a subreddit (opt: subreddit)  
  sp : deletes all posts in a subreddit    (opt: subreddit)  
  
+Scrubby requires python 3.10 or higher as well as the praw and logging modules.
